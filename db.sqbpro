@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/angel Rene Alvarez/Documents/UNAH/Tutorías/Django/ControlInventario/db.sqlite3" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3668"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,18:mainEmpleados_empleado"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TRIGGER tg_ventas
+AFTER INSERT ON Ventas_concepto
+BEGIN
+	UPDATE Ventas_venta SET total = (SELECT
+	SUM(Ventas_concepto.cantidad*Productos_producto.precio)
+	FROM Ventas_concepto INNER JOIN Ventas_venta ON
+	Ventas_concepto.venta_id=Ventas_venta.id INNER JOIN Productos_producto ON
+	Ventas_concepto.producto_id=Productos_producto.id 
+	WHERE Ventas_venta.id=NEW.venta_id) WHERE id=NEW.venta_id;
+	
+	UPDATE Productos_producto SET cantidad = cantidad - NEW.cantidad
+	WHERE id=NEW.producto_id;
+END</sql><current_tab id="0"/></tab_sql></sqlb_project>
